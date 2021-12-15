@@ -1,12 +1,15 @@
 CC = clang
 CFLAGS = -Wall -Wpedantic -Werror -Wextra $(shell pkg-config --cflags gmp)
-OBJS = rsa.o randstate.o numtheory.o
 LFLAGS = $(shell pkg-config --libs gmp)
-KEYGEN = keygen.o
-ENCRYPT = encrypt.o
-DECRYPT = decrypt.o
 
-.PHONY: all clean format scan-build debug keys
+RSA = ./src/rsa/
+SRC = ./src/
+OBJS = $(RSA)rsa.o $(RSA)randstate.o $(RSA)numtheory.o
+KEYGEN = $(SRC)keygen.o
+ENCRYPT = $(SRC)encrypt.o
+DECRYPT = $(SRC)decrypt.o
+
+.PHONY: all clean scan-build debug keys
 
 all: keygen encrypt decrypt
 
@@ -22,17 +25,14 @@ decrypt: $(OBJS) $(DECRYPT)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 
+keys: clean
+	rm -f rsa.p*
+
 clean:
 	rm -f keygen encrypt decrypt *.o
-
-format:
-	clang-format -i -style=file *.[ch]
 
 scan-build: clean
 	scan-build --use-cc=$(CC) make	
 
 debug: CFLAGS += -g
 debug: clean all
-
-keys: clean
-	rm -f rsa.p*
