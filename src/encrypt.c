@@ -15,17 +15,7 @@ void help_message(char *error, FILE **files);
 void close_files(FILE **files);
 bool check_optarg(char *optarg, FILE **files);
 
-//
-// main contains the logic that allows the parses through the flags/input and outputs a encrypted file.
-//
-// main takes 2 arguments: argc and argv. argc represents the total number of command line arguments. argv represents
-// every argument other than the file name/executable.
-//
-// main returns either 1 or 0 depending if there were any errors that occurred while running.
-//
-// The function below (the encrypt function) is based on the ideas and instructions given in the assignment
-// documentation by Professor Long.
-//
+
 int main(int argc, char **argv) {
     int8_t opt = 0;
     bool verbose = false;
@@ -108,11 +98,9 @@ int main(int argc, char **argv) {
 }
 
 //
-// close_files simply closes file pointers.
+// Closes file pointers.
 //
-// close_files takes 1 argument: files. Files is an array of file pointers to free.
-//
-// close_files returns nothing/void.
+// files: an array of file pointers
 //
 void close_files(FILE **files) {
     if (files[PBFILE]) {
@@ -127,12 +115,10 @@ void close_files(FILE **files) {
 }
 
 //
-// check_optarg aims to ensure a flag that needs an argument has an argument.
+// Ensures a flag that needs an argument has an argument.
 //
-// This function takes 2 arguments: optarg and files. Files represents the files to free if there is no argument while
-// optarg represents the argument to check.
-//
-// This function returns whether there was an argument or not.
+// optarg: the argument for the specified flag
+// files: an array of file pointers
 //
 bool check_optarg(char *optarg, FILE **files) {
     if (!optarg) {
@@ -143,13 +129,10 @@ bool check_optarg(char *optarg, FILE **files) {
 }
 
 //
-// help_message simply prints out the help message that describes how to use the program and prints an error if
-// specified.
+// Prints out the help message that describes how to use the program and prints an error if specified.
 //
-// Returns nothing
-//
-// help_message takes 2 arguments: error and files. Files represents the files to close/free and error represents the
-// error to print if there is one.
+// error: an error to print
+// files: an array of file pointers
 //
 void help_message(char *error, FILE **files) {
     if (*error != '\0') {

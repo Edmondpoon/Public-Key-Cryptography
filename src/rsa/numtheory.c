@@ -2,14 +2,11 @@
 #include "randstate.h"
 
 //
-// gcd aims to calculate the greatest common divisor between two numbers.
+// Calculates the greatest common divisor between two numbers.
 //
-// gcd takes 3 arguments: d, a, and b. The arguments a and b represent the two numbers we are checking while d
-// represents the variable we will store the gcd in.
-//
-// gcd returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// d: the greatest common divisor
+// a: the first input value
+// b: the second input value
 //
 void gcd(mpz_t d, mpz_t a, mpz_t b) {
     mpz_t op1, op2, temp;
@@ -27,14 +24,11 @@ void gcd(mpz_t d, mpz_t a, mpz_t b) {
 }
 
 //
-// mod_inverse aims to find the modular multiplicative inverse of a number given a modulo n.
+// Finds the modular multiplicative inverse of a number given a modulo n.
 //
-// mod_inverse takes 3 arguments: i, a, and n. The arguments a and n represent the the integer we want the inverse of
-// and the modulo respectively. Lastly, i represents the variable we store our answer into.
-//
-// mod_inverse returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// i: the modular multiplicative inverse
+// a: the number to use
+// n: the modulus
 //
 void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
     mpz_t r, r_prime, t, t_prime, q, temp;
@@ -68,14 +62,12 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
 }
 
 //
-// pow_mod aims to find the modulus of base to the power of exponent.
+// Finds the modulus of base to the power of exponent.
 //
-// This function takes 4 arguments: out, base, exponent, and modulus. Base represents the number we want to calculate to
-// be to the power of exponent. Modulus represents the modulo and out represents the variable we store our answer to.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// out: the modulus of the product
+// base: the base of the exponent
+// expoenent: the exponent power
+// modulus: the modulus to use
 //
 void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
     mpz_t approx, t_base, t_exponent;
@@ -97,14 +89,10 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 }
 
 //
-// is_prime aims to determine whether a number has a high chance of being a prime number.
+// Determines whether a number has a high chance of being a prime number.
 //
-// This function takes 2 arguments: n and iters. The argument n represents the number we are checking and iters
-// represents the number of iterations of the Miller-Rabin primality test that we will do to reach our final guess.
-//
-// This function returns whether the given number n is prime or not.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// n: the number to check
+// iters: the number of iterations to use for the Miller-Rabin primality testing
 //
 bool is_prime(mpz_t n, uint64_t iters) {
     // Base case of 1, 2 and 3 since those break the Miller-Rabin primality theorem
@@ -164,15 +152,11 @@ bool is_prime(mpz_t n, uint64_t iters) {
 }
 
 //
-// make_prime aims to generate a prime that is at least bits number of bits long.
+// Generates a prime that is at least bits number of bits long.
 //
-// THis function takes 3 arguments: p, bits, iters. Bits and iters represents the number of bits that prime number must
-// be and the number of iterations for the Miller-Rabin primality test respectively. Lastly, p repressnts the variable
-// we store our prime in.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// p: the final prime number
+// bits: the minimum number of bits the prime number must be
+// iters: the number of iterations for the Miller-Rabin primality testing
 //
 void make_prime(mpz_t p, uint64_t bits, uint64_t iters) {
     mpz_urandomb(p, state, bits + 1);

@@ -3,15 +3,14 @@
 #include <stdlib.h>
 
 //
-// rsa_make_pub aims to generate a public RSA key.
+// Generate a public RSA key.
 //
-// This function takes 6 arguments: p, q, n, e, nbits, and iters. Nbits and iters represent the aspects the user wants
-// for the prime numbers. p and q represent the variables we store the two prime numbers into. n represents the product
-// of the primes and e represents the public exponent.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// p: the first prime number
+// q: the second prime number
+// n: the product of the two prime numbers
+// e: the public exponent
+// nbits: the minimum number of bits of the product n
+// iters: the number of iterations to use for the Miller-Rabin primality testing
 //
 void rsa_make_pub(mpz_t p, mpz_t q, mpz_t n, mpz_t e, uint64_t nbits, uint64_t iters) {
     // Avoid a lower and upper bound of 0
@@ -63,15 +62,13 @@ void rsa_make_pub(mpz_t p, mpz_t q, mpz_t n, mpz_t e, uint64_t nbits, uint64_t i
 }
 
 //
-// rsa_write_pub aims to write out the public key and a signature to a file.
+// Writes out the public key and a signature to a file.
 //
-// This function has 5 arguments: n, e, s, username, and pbfile. Username represents the name of the user while pbfile
-// represents the file to write the key to. Lastly, n, e, and s represent the aspects of the public key and the user's
-// signature.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// n: the public product
+// e: the public exponent
+// s: the signature of the user
+// username: the username of the user
+// pbfile: the file to write the info into
 //
 void rsa_write_pub(mpz_t n, mpz_t e, mpz_t s, char username[], FILE *pbfile) {
     gmp_fprintf(pbfile, "%Zx\n", n);
@@ -82,15 +79,13 @@ void rsa_write_pub(mpz_t n, mpz_t e, mpz_t s, char username[], FILE *pbfile) {
 }
 
 //
-// rsa_read_pub aims to read a public key from a file.
+// Reads a public key from a file.
 //
-// This function has 5 arguments: n, e, s, username, and pbfile. Username represents the name of the user while pbfile
-// represents the file to read the key from. Lastly, n, e, and s represent the aspects of the public key and the user's
-// signature.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// n: the product of the two primes
+// e: the public exponent
+// s: the signature of the user
+// username: the username of the current user
+// pbfile: the file that contains the public key
 //
 void rsa_read_pub(mpz_t n, mpz_t e, mpz_t s, char username[], FILE *pbfile) {
     gmp_fscanf(pbfile, "%Zx\n", n);
@@ -101,15 +96,12 @@ void rsa_read_pub(mpz_t n, mpz_t e, mpz_t s, char username[], FILE *pbfile) {
 }
 
 //
-// rsa_make_priv aims to generate a private RSA key.
+// Generates a private RSA key.
 //
-// This function takes 4 arguments: p, q, e, and d. The arguments p and q are the prime numbers used in the public key.
-// The argument e represents the public exponent from the public key too while d represents the variable we store the
-// private key to.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// d: the private key
+// e: the public exponent
+// p: the first prime number
+// q: the second prime number
 //
 void rsa_make_priv(mpz_t d, mpz_t e, mpz_t p, mpz_t q) {
     mpz_t p1, q1, totient;
@@ -123,14 +115,11 @@ void rsa_make_priv(mpz_t d, mpz_t e, mpz_t p, mpz_t q) {
 }
 
 //
-// rsa_write_priv aims to write out the private key to a file.
+// Writes out the private key to a file.
 //
-// This function has 3 arguments: n, d, and pvfile. Pvfile represents the file to write the key to. Lastly, n and d
-// represent the aspects of the private key.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// n: the product of the primes
+// d: the private key
+// pvfile: the file to write the info into
 //
 void rsa_write_priv(mpz_t n, mpz_t d, FILE *pvfile) {
     gmp_fprintf(pvfile, "%Zx\n", n);
@@ -139,14 +128,11 @@ void rsa_write_priv(mpz_t n, mpz_t d, FILE *pvfile) {
 }
 
 //
-// rsa_read_priv aims to read a private key from a file.
+// Reads a private key from a file.
 //
-// This function has 3 arguments: n, d, and pvfile. Pvfile represents the file to read the key from. Lastly, n and d
-// represent the aspects of the private key.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// n: the product of the primes
+// d: the private key
+// pvfile: the file to read the private key from
 //
 void rsa_read_priv(mpz_t n, mpz_t d, FILE *pvfile) {
     gmp_fscanf(pvfile, "%Zx\n", n);
@@ -155,14 +141,12 @@ void rsa_read_priv(mpz_t n, mpz_t d, FILE *pvfile) {
 }
 
 //
-// rsa_encrypt aims to encrypt a message using the public key.
+// Encrypts a message using the public key.
 //
-// This function takes 4 arguments: c, m, e, and n. C and m represent the encrypted message and original message
-// repsectively. Lastly, e and n represent the aspects of the public key.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// c: the ciphertext
+// m: the message to excrypt
+// e: the public exponent
+// n: the public product
 //
 void rsa_encrypt(mpz_t c, mpz_t m, mpz_t e, mpz_t n) {
     pow_mod(c, m, e, n);
@@ -170,14 +154,12 @@ void rsa_encrypt(mpz_t c, mpz_t m, mpz_t e, mpz_t n) {
 }
 
 //
-// rsa_encrypt_file aims to fully encrypt a file's content and write it to a file.
+// Encrypts a file's content and write it to a file.
 //
-// This function takes 4 arguments: infile, outfile, n, and e. Infile and outfile represent the file to encrypt and file
-// to write to respectively. Lastly, n and e represent the aspects of the public key.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// infile: the file to encrypt
+// outfile: the file to write the ciphertext into
+// n: the public product
+// e: the public exponent
 //
 void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
     mpz_t encrypted, size, message;
@@ -213,14 +195,12 @@ void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
 }
 
 //
-// rsa_decrypt aims to decrypt a message using the private key.
+// Decrypts a message using the private key.
 //
-// This function takes 4 arguments: c, m, d, and n. C and m represent the encrypted message and decrypted message
-// repsectively. Lastly, d and n represent the aspects of the private key.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// m: the decrypted message
+// c: the ciphertext
+// d: the private key
+// n: the public product
 //
 void rsa_decrypt(mpz_t m, mpz_t c, mpz_t d, mpz_t n) {
     pow_mod(m, c, d, n);
@@ -228,14 +208,12 @@ void rsa_decrypt(mpz_t m, mpz_t c, mpz_t d, mpz_t n) {
 }
 
 //
-// rsa_decrypt_file aims to fully decrypt a file's content and write it to a file.
+// Decrypts a file's content and write it to a file.
 //
-// This function takes 4 arguments: infile, outfile, n, and d. Infile and outfile represent the file to decrypt and file
-// to write to respectively. Lastly, n and d represent the aspects of the private key.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// infile: the file to decrypt
+// outfile: the file to write the decrypted bytes into
+// n: the public product
+// d: the private key
 //
 void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
     mpz_t message, decrypted, size;
@@ -271,14 +249,12 @@ void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
 }
 
 //
-// rsa_sign aims to sign the user's username to allow the recipient of a message to know the sender of the message.
+// Signs the user's username to allow the recipient of a message to know the sender of the message.
 //
-// This function takes 4 arguments: s, m, d, and n. The arguments d and n represent the apsects of the private key while
-// s and m represent the signature and the user's name respectively.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// s: the signature of the user
+// m: the username of the user
+// d: the private key
+// n: the public product
 //
 void rsa_sign(mpz_t s, mpz_t m, mpz_t d, mpz_t n) {
     pow_mod(s, m, d, n);
@@ -286,14 +262,12 @@ void rsa_sign(mpz_t s, mpz_t m, mpz_t d, mpz_t n) {
 }
 
 //
-// rsa_verify aims to verify the sender of the message.
+// Verifies the sender of the message.
 //
-// This function takes 4 arguments: m, s, e, and n. The arguments e and n represent the apsects of the public key while
-// s and m represent the signature and the user's name respectively.
-//
-// This function returns nothing/void.
-//
-// Note that this function is based on and build off of the given ideas by Professor Long in the assignment documentation.
+// m: the username of the user
+// s: the signature of the valid username
+// e: the public exponent
+// n: the public product
 //
 bool rsa_verify(mpz_t m, mpz_t s, mpz_t e, mpz_t n) {
     mpz_t t;
