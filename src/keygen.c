@@ -128,6 +128,7 @@ void close_files(FILE **files) {
     if (files[PVFILE]) {
         fclose(files[PVFILE]);
     }
+    return;
 }
 
 //

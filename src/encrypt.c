@@ -112,6 +112,7 @@ void close_files(FILE **files) {
     if (files[OUTFILE] && files[OUTFILE] != stdout) {
         fclose(files[OUTFILE]);
     }
+    return;
 }
 
 //

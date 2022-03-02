@@ -72,7 +72,6 @@ int main(int argc, char **argv) {
         gmp_fprintf(stdout, "n (%d bits) = %Zd\n", mpz_sizeinbase(mod, 2), mod);
         gmp_fprintf(stdout, "d (%d bits) = %Zd\n", mpz_sizeinbase(secret, 2), secret);
     }
-
     rsa_decrypt_file(files[INFILE], files[OUTFILE], mod, secret);
     close_files(files);
     mpz_clears(secret, mod, NULL);
@@ -94,6 +93,7 @@ void close_files(FILE **files) {
     if (files[OUTFILE] && files[OUTFILE] != stdout) {
         fclose(files[OUTFILE]);
     }
+    return;
 }
 
 //

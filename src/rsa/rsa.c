@@ -2,16 +2,14 @@
 #include "randstate.h"
 #include <stdlib.h>
 
-//
 // Generate a public RSA key.
 //
-// p: the first prime number
-// q: the second prime number
-// n: the product of the two prime numbers
-// e: the public exponent
 // nbits: the minimum number of bits of the product n
 // iters: the number of iterations to use for the Miller-Rabin primality testing
-//
+// p    : the first prime number
+// q    : the second prime number
+// n    : the product of the two prime numbers
+// e    : the public exponent
 void rsa_make_pub(mpz_t p, mpz_t q, mpz_t n, mpz_t e, uint64_t nbits, uint64_t iters) {
     // Avoid a lower and upper bound of 0
     if (nbits < 4) {
@@ -61,15 +59,13 @@ void rsa_make_pub(mpz_t p, mpz_t q, mpz_t n, mpz_t e, uint64_t nbits, uint64_t i
     return;
 }
 
-//
 // Writes out the public key and a signature to a file.
 //
-// n: the public product
-// e: the public exponent
-// s: the signature of the user
 // username: the username of the user
-// pbfile: the file to write the info into
-//
+// pbfile  : the file to write the info into
+// n       : the public product
+// e       : the public exponent
+// s       : the signature of the user
 void rsa_write_pub(mpz_t n, mpz_t e, mpz_t s, char username[], FILE *pbfile) {
     gmp_fprintf(pbfile, "%Zx\n", n);
     gmp_fprintf(pbfile, "%Zx\n", e);
@@ -78,15 +74,13 @@ void rsa_write_pub(mpz_t n, mpz_t e, mpz_t s, char username[], FILE *pbfile) {
     return;
 }
 
-//
 // Reads a public key from a file.
 //
-// n: the product of the two primes
-// e: the public exponent
-// s: the signature of the user
 // username: the username of the current user
-// pbfile: the file that contains the public key
-//
+// pbfile  : the file that contains the public key
+// n       : the product of the two primes
+// e       : the public exponent
+// s       : the signature of the user
 void rsa_read_pub(mpz_t n, mpz_t e, mpz_t s, char username[], FILE *pbfile) {
     gmp_fscanf(pbfile, "%Zx\n", n);
     gmp_fscanf(pbfile, "%Zx\n", e);
@@ -95,14 +89,12 @@ void rsa_read_pub(mpz_t n, mpz_t e, mpz_t s, char username[], FILE *pbfile) {
     return;
 }
 
-//
 // Generates a private RSA key.
 //
 // d: the private key
 // e: the public exponent
 // p: the first prime number
 // q: the second prime number
-//
 void rsa_make_priv(mpz_t d, mpz_t e, mpz_t p, mpz_t q) {
     mpz_t p1, q1, totient;
     mpz_inits(p1, q1, totient, NULL);
@@ -114,53 +106,45 @@ void rsa_make_priv(mpz_t d, mpz_t e, mpz_t p, mpz_t q) {
     return;
 }
 
-//
 // Writes out the private key to a file.
 //
-// n: the product of the primes
-// d: the private key
 // pvfile: the file to write the info into
-//
+// n     : the product of the primes
+// d     : the private key
 void rsa_write_priv(mpz_t n, mpz_t d, FILE *pvfile) {
     gmp_fprintf(pvfile, "%Zx\n", n);
     gmp_fprintf(pvfile, "%Zx\n", d);
     return;
 }
 
-//
 // Reads a private key from a file.
 //
-// n: the product of the primes
-// d: the private key
 // pvfile: the file to read the private key from
-//
+// n     : the product of the primes
+// d     : the private key
 void rsa_read_priv(mpz_t n, mpz_t d, FILE *pvfile) {
     gmp_fscanf(pvfile, "%Zx\n", n);
     gmp_fscanf(pvfile, "%Zx\n", d);
     return;
 }
 
-//
 // Encrypts a message using the public key.
 //
 // c: the ciphertext
 // m: the message to excrypt
 // e: the public exponent
 // n: the public product
-//
 void rsa_encrypt(mpz_t c, mpz_t m, mpz_t e, mpz_t n) {
     pow_mod(c, m, e, n);
     return;
 }
 
-//
 // Encrypts a file's content and write it to a file.
 //
-// infile: the file to encrypt
 // outfile: the file to write the ciphertext into
-// n: the public product
-// e: the public exponent
-//
+// infile : the file to encrypt
+// n      : the public product
+// e      : the public exponent
 void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
     mpz_t encrypted, size, message;
     mpz_inits(encrypted, size, message, NULL);
@@ -194,27 +178,23 @@ void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
     return;
 }
 
-//
 // Decrypts a message using the private key.
 //
 // m: the decrypted message
 // c: the ciphertext
 // d: the private key
 // n: the public product
-//
 void rsa_decrypt(mpz_t m, mpz_t c, mpz_t d, mpz_t n) {
     pow_mod(m, c, d, n);
     return;
 }
 
-//
 // Decrypts a file's content and write it to a file.
 //
-// infile: the file to decrypt
 // outfile: the file to write the decrypted bytes into
-// n: the public product
-// d: the private key
-//
+// infile : the file to decrypt
+// n      : the public product
+// d      : the private key
 void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
     mpz_t message, decrypted, size;
     mpz_inits(message, decrypted, size, NULL);
@@ -248,27 +228,23 @@ void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
     return;
 }
 
-//
 // Signs the user's username to allow the recipient of a message to know the sender of the message.
 //
 // s: the signature of the user
 // m: the username of the user
 // d: the private key
 // n: the public product
-//
 void rsa_sign(mpz_t s, mpz_t m, mpz_t d, mpz_t n) {
     pow_mod(s, m, d, n);
     return;
 }
 
-//
 // Verifies the sender of the message.
 //
 // m: the username of the user
 // s: the signature of the valid username
 // e: the public exponent
 // n: the public product
-//
 bool rsa_verify(mpz_t m, mpz_t s, mpz_t e, mpz_t n) {
     mpz_t t;
     mpz_init(t);
